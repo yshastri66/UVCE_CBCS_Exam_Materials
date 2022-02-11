@@ -1,0 +1,14 @@
+>>>Blockchain internal questions<<<
+
+1. Define Blockchain, explain layers and structure of Blockchain.
+2. Explain cryptography. Explain the types of cryptography.
+3. Explain hash functions with code examples.
+4. Explain merkle tree.
+5. What is Bitcoin. With the neat diagram explain block structure of bitcoin blockchain.
+6. Explain the following:  i. difficulty target
+ii. Genesis block
+iii. Bitcoin block
+7. Explain bitcoin scripts.
+8. With diagram explain merkle root a block header of SPV.
+9. What is etherium and explain design philosophy of etherium.
+10. Explain etherium blockchain.

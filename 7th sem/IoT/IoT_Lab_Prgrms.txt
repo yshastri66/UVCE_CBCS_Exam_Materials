@@ -1,0 +1,276 @@
+void setup()
+{
+	pinMode(13,OUTPUT);
+	pinMode(11,OUTPUT);
+	pinMode(12, OUTPUT);
+}
+
+
+void control(int x, int y, int z, int d){
+
+	digitalWrite(x,HIGH);
+	digitalWrite(y,LOW);
+	digitalWrite(z,LOW);
+	delay(d);
+}
+
+
+void loop(){
+	control(11,12,13,4000);
+	control(12,11,13,1000);
+	control(13,11,12,3000);
+}
+
+
+
+----------------------------------------------------------------
+
+int var;
+
+void setup(){
+
+	pinMode(13,OUTPUT);
+	pinMode(A0,INPUT);
+	Serial.begin(9600);
+}
+
+void loop(){
+value = analogRead(A0);
+
+Serial.println(value);
+
+if(value<10)
+	digitalWrite(13,0);
+if(value>10 && value<50)
+	digitalWrite(13,50);
+if(value>50 && value<100)
+	digitalWrite(13,100);
+if(value>100 && value<150)
+	digitalWrite(13,150);
+if(value>150 && value<250)
+	digitalWrite(13,200);
+if(value>250)
+	digitalWrite(13,255);
+}
+
+-----------------------------------------------------------------
+
+
+int buttonPin = 2;
+int ledPin = 13;
+
+int buttonstate = 0;
+
+
+void setup(){
+	pinMode(buttonPin,INPUT);
+	pinMode(ledPin,OUTPUT);
+}
+
+void loop(){
+
+	buttonstate = digitalRead(buttonPin);
+	
+	if(buttonstate==HIGH)
+		digitalWrite(ledPin,HIGH);
+	else
+		digitalWrite(ledPin,LOW);
+}
+	
+debouncer:
+
+int buttonpin = 2;
+int ledpin = 13;
+
+int buttonstate;
+
+int ledstate = HIGH;
+int lastbuttonstate=LOW;
+
+unsigned long lastdebouncetime = 0;
+unsigned long debouncegap = 50;
+
+void setup(){
+	pinMode(ledpin,OUTPUT);
+	pinMode(buttonpin,INPUT);
+	
+	digitalWrite(ledpin,ledstate);
+}
+
+void loop()
+{
+	int reading = digitalRead(buttonpin);
+	
+	if(reading!=lastbuttonstate)
+		lastbouncetime = millis();
+	
+	if((millis()-lastbouncetime)>debouncegap)
+	{
+		if(reading!=buttonstate){
+			buttonstate=reading;
+		
+			if(buttonstate==HIGH)
+				ledstate = !ledstate;
+		}
+	}
+	digitalWrite(ledpin,ledstate);
+	lastbuttonstate=reading
+}
+
+------------------------------------------------------------
+
+int ledpin = 13;
+
+
+void setup(){
+	Serial.begin(9600);
+	pinMode(13,OUTPUT);
+}
+
+void loop(){
+	
+	if(Serial.available()>0){
+		Serial.print("0:LED off, 1:LED on");
+		int val = Serial.read();
+		
+		if(val==1){
+			digitalWrite(ledpin,HIGH);
+			delay(100);
+			Serial.println("LED On");
+		}
+		if(val==0){
+			digitalWrite(ledpin,LOW);
+			delay(100);
+			Serial.println("LED Off");
+		}
+	}
+}
+
+--------------------------------------------------------------
+
+
+#include<SimpleDHT.h>
+
+int dhtpin = 2;
+
+SimpleDHT11 dht11(dhtpin);
+
+void setup(){
+	Serial.begin(115200);
+}
+
+void loop(){
+	Serial.print("======================");
+	Serial.print("Simple DHT11");
+	byte temp = 0
+	byte humidity = 0
+
+	int err = SimpleDHTErrSuccess;
+		
+	if((err=dht11.read(&temp,&humidity,NULL)!=SimpleDHTErrSuccess){
+		Serial.print("Read DHT11 failed. Error:");
+		Serial.print(SimpleDHTErrCode(err));
+		Serial.print(",");
+		Serial.print(SimpleDHTErrDuration(err));
+		delay(1000);
+		return;
+	}
+	
+	Serial.print("OK");
+	Serial.print((int)temp);
+	Serial.print((int)humidity);
+	
+	delay(1500);
+}
+
+
+----------------------------------------------------------------------------------
+
+int trigpin = 7;
+int echopin = 10;
+int ledpin = 11;
+
+void setup(){
+	pinMode(trigpin,OUTPUT);
+	pinMode(echopin,INPUT);
+	pinMode(ledpin,OUTPUT);
+}
+
+void loop(){
+	int duration,distance;
+	digitalWrite(trigpin,HIGH);
+	delay(10);
+	digitalWrite(trigpin,LOW);
+	
+	duration = pulseIn(echopin,HIGH);
+	distance = ((duration/2)/29.1);
+	Serial.println(distance);
+	
+	if(distance<=5 && distance>=0){
+		digitalWrite(ledpin,HIGH);
+	else
+		digitalWrite(ledpin,LOW);
+	delay(100);
+}
+
+-------------------------------------------------------------------------------
+
+import paho.mqtt.client as mqtt
+from random import randrange,uniform
+
+mqttBroker = "mqtt.eclipseprojects.io"
+
+client = mqtt.client("Tempareture_Inside")
+client.connect(mqttBroker)
+
+while True:
+	randnum = uniform(20.0,21.0)
+	client.publish("Tempareture",randnum)
+	print("Just published:"+str(randnum)+"to topic Tempareture")
+	time.sleep(1)
+
+
+---------------------------------------------------------------------------------------------		
+int buttonPin = 2;
+int ledPin = 13;
+
+boolean buttonstate = LOW;
+int count=0;
+
+void setup(){
+	pinMode(buttonPin,INPUT);
+	pinMode(ledPin,OUTPUT);
+  Serial.begin(9600);
+}
+
+int toggleState(int state){
+
+  int currentState = digitalRead(buttonPin);
+  if(state!=currentState){
+    delay(10);
+    currentState = digitalRead(buttonPin);
+  }
+  return currentState;
+}
+
+void loop(){
+
+  Serial.println(count);
+  if(toggleState(buttonstate)==HIGH && buttonstate==LOW){
+    count++;
+    buttonstate=HIGH;
+  }
+  else if(toggleState(buttonstate)==LOW && buttonstate==HIGH){
+    buttonstate=LOW;
+  }
+
+  if(count==4){
+    digitalWrite(ledPin, HIGH);
+  }
+	
+}
+
+	
+
+
+
